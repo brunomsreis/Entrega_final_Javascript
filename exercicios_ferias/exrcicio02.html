@@ -1,0 +1,107 @@
+<script>
+    
+    const xhr = new XMLHttpRequest();
+    
+    xhr.open("GET", "https://cat-fact.herokuapp.com/facts/", true);
+    
+    
+    xhr.onload = function () {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        
+        const response = JSON.parse(xhr.responseText);
+        console.log(response);
+      } else {
+        console.error("Erro ao realizar a solicitação:", xhr.statusText);
+      }
+    };
+    
+    
+    xhr.onerror = function () {
+      console.error("Erro na solicitação.");
+    };
+    
+    
+    xhr.send();
+  
+    
+fetch("https://cat-fact.herokuapp.com/facts/")
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Erro ao realizar a solicitação");
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Erro:', error.message);
+  });
+
+
+  function fetchDataFromApi() {
+  return new Promise((resolve, reject) => {
+    fetch("https://cat-fact.herokuapp.com/facts/")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Erro ao realizar a solicitação");
+        }
+        return response.json();
+      })
+      .then(data => {
+        resolve(data);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
+
+
+fetchDataFromApi()
+  .then(data => {
+    console.log("Dados obtidos pela API:", data);
+  })
+  .catch(error => {
+    console.error("Erro durante a solicitação:", error);
+  });
+
+
+  function logTextFromApi() {
+  return new Promise((resolve, reject) => {
+    fetch("https://cat-fact.herokuapp.com/facts/")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Erro ao realizar a solicitação");
+        }
+        return response.json();
+      })
+      .then(data => {
+        const textArray = data.map(item => item.text);
+        resolve(textArray);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+}
+
+
+logTextFromApi()
+  .then(textArray => {
+    textArray.forEach(text => {
+      console.log("Frase:", text);
+    });
+  })
+  .catch(error => {
+    console.error("Erro durante a solicitação:", error);
+  });
+
+
+
+
+
+
+
+
+</script>

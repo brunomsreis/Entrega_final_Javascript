@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+
+//Obter produto com o endpoint https://fakestoreapi.com/products/1
+ 
+async function obterProduto(id) {
+        const url = `https://fakestoreapi.com/products/${id}`;
+  
+        try {
+            const resposta = await fetch(url);
+            const produto = await resposta.json();
+    
+            console.log(produto);
+
+            criarGrade(produto);
+            adicionarProdutosRelacionados(produto);
+            adicionarFooter();
+
+        } catch (erro) {
+            console.error('Erro ao obter o produto:', erro);
+        }
+    }
+
+    // Criar o espaço do produto na página
+    function criarGrade(produto) {
+        const container = document.createElement('div');
+        container.id = 'grid-container';
+        document.body.appendChild(container);
+
+        adicionarElementoAoContainer(container, produto);
+    }
+
+    function adicionarElementoAoContainer(container, produto) {
+        const elementoProduto = document.createElement('div');
+        elementoProduto.className = 'produto';
+        elementoProduto.innerHTML = `
+            <h3>${produto.title}</h3>
+            <img src="${produto.image}" alt="${produto.title}" style="max-width: 100%;">
+            <p>${produto.description}</p>
+            <p>Preço: $${produto.price}</p>
+        `;
+
+        
+        container.appendChild(elementoProduto);
+    }
+
+// Adicionar grelha de produtos relacionados
+    async function adicionarProdutosRelacionados(produto) {
+    const categoria = produto.category;
+
+    // Obter os 3 primeiros produtos da mesma categoria
+    const produtosRelacionados = await obterProdutosPorCategoria(categoria);
+    
+    // Excluir o produto principal da lista de produtos relacionados
+    const produtosExcluindoAtual = produtosRelacionados.filter(p => p.id !== produto.id);
+    
+    // Criar a grelha de produtos relacionados
+    const produtosRelacionadosContainer = document.createElement('div');
+    produtosRelacionadosContainer.id = 'related-products-container';
+    document.body.appendChild(produtosRelacionadosContainer);
+
+    // Adicionar os produtos relacionados à grelha
+    for (const produtoRelacionado of produtosExcluindoAtual.slice(0, 3)) {
+        adicionarElementoAoContainer(produtosRelacionadosContainer, produtoRelacionado);
+    }
+    }
+// Obter produtos por categoria
+        async function obterProdutosPorCategoria(categoria) {
+        const url = `https://fakestoreapi.com/products/category/${categoria}`;
+  
+        try {
+            const resposta = await fetch(url);
+            const produtos = await resposta.json();
+            return produtos;
+        } catch (erro) {
+            console.error('Erro ao obter produtos por categoria:', erro);
+        }
+    }
+
+    // Adicionar footer com texto dinâmico
+        function adicionarFooter() {
+        const footer = document.createElement('footer');
+        footer.innerHTML = `<p>&copy; Copyright ${new Date().getFullYear()}</p>`;
+        document.body.appendChild(footer);
+    }
+
+    // Chamar a função para obter o produto com o ID 1
+    obterProduto(1);
+</script>
+</html>

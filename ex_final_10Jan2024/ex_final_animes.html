@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  
+
+<script>
+  
+
+
+// Aguarde até que o conteúdo da página seja totalmente carregado
+document.addEventListener("DOMContentLoaded", function() {
+  // Criação dos elementos
+  var grelha = document.createElement("div");
+  grelha.className = "grelha closed";
+
+  var detalhes = document.createElement("div");
+  detalhes.className = "detalhes hidden";
+
+  var close = document.createElement("div");
+  close.className = "close";
+  close.textContent = "🔙";
+
+  var grelhaDetalhes = document.createElement("div");
+  grelhaDetalhes.className = "grelha";
+
+  var content = document.createElement("div");
+  content.className = "content";
+
+  var imagem = document.createElement("img");
+  imagem.src = "";
+  imagem.alt = "imagem do anime";
+  imagem.className = "imagem";
+
+  var nome = document.createElement("h1");
+  nome.className = "nome";
+  nome.innerHTML = "Nome: <span class='value'></span>";
+
+  var rating = document.createElement("p");
+  rating.className = "rating";
+  rating.innerHTML = "Rating: <span class='value'></span>";
+
+  var releaseDate = document.createElement("p");
+  releaseDate.className = "releaseDate";
+  releaseDate.innerHTML = "Release date: <span class='value'></span>";
+
+  var genres = document.createElement("p");
+  genres.className = "genres";
+  genres.innerHTML = "Géneros: <span class='value'></span>";
+
+  // Adição dos elementos ao DOM
+  content.appendChild(imagem);
+  content.appendChild(nome);
+  content.appendChild(rating);
+  content.appendChild(releaseDate);
+  content.appendChild(genres);
+
+  detalhes.appendChild(close);
+  detalhes.appendChild(grelhaDetalhes);
+  detalhes.appendChild(content);
+
+  // Adiciona os elementos criados ao corpo da página
+  document.body.appendChild(grelha);
+  document.body.appendChild(detalhes);
+});
+
+
+  const MIN_SCORE = 9;
+  const fetchAnimes = async (minScore) => {
+    const animesRes = await fetch("https://api.jikan.moe/v4/top/anime");
+    const animes = await animesRes.json();
+
+    return animes.data.filter(anime => anime.score > minScore);
+  }
+
+  const openAnime = (anime) => {
+    document.querySelector(".grelha").classList.add("open");
+
+    const detalhes = document.querySelector(".detalhes");
+    detalhes.classList.remove("hidden");
+
+    const { images, title, rating, aired } = anime;
+
+
+    
+    detalhes.querySelector("img").src = images.jpg.large_image_url;
+    detalhes.querySelector(".nome .value").innerText = title;
+    detalhes.querySelector(".rating .value").innerText = rating;
+    detalhes.querySelector(".releaseDate .value").innerText = `${aired.prop.from.day}/${aired.prop.from.month}/${aired.prop.from.year}`;
+
+    const genres = anime.genres.map(genre => genre.name);
+
+    detalhes.querySelector(".genres .value").innerText = `${genres.join(", ")}`;
+ 
+  }
+
+  
+
+  fetchAnimes(MIN_SCORE).then(animes => {
+    animes.forEach(anime => {
+      const item = document.createElement("div");
+      item.innerHTML = `<div class="item"><img class="thumbnail" src=${anime.images.jpg.image_url} alt="image thumbnail"><span class="title">${anime.title}</span></div>`
+
+      
+
+      item.id = anime.mal_id;
+      item.addEventListener("click", () => {
+        openAnime(anime);
+      })
+      document.querySelector(".grelha").appendChild(item)
+    })
+    const footer = document.createElement("footer");
+const paragraph = document.createElement("p");
+
+// Obtém o ano atual
+const anoAtual = new Date().getFullYear();
+
+paragraph.textContent = `© ${anoAtual} Sua Empresa. Todos os direitos reservados.`;
+footer.appendChild(paragraph);
+document.body.appendChild(footer);
+
+    document.querySelector(".detalhes .close").addEventListener("click", () => {
+    document.querySelector(".detalhes").classList.add("hidden");
+    document.querySelector(".grelha").classList.remove("open");
+  })
+});
+
+
+</script>
+</body>
+</html>

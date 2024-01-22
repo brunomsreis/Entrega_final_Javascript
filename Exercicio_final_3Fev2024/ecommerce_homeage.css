@@ -1,0 +1,21 @@
+.body {
+    display: flex;
+  }
+  
+  .Grelha {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%; /* Ocupa 100% da largura da tela */
+  }
+  
+  .produto {
+    width: calc(33.33% - 10px); /* 10px de espaçamento entre os itens */
+    margin-bottom: 10px; /* Adiciona espaçamento na parte inferior dos itens */
+    box-sizing: border-box; /* Garante que as bordas e preenchimentos não aumentem a largura */
+  }
+  
+  .produto img {
+    width: 100%; /* A imagem ocupará 100% da largura da div .produto */
+    height: auto; /* Mantém a proporção original */
+  }

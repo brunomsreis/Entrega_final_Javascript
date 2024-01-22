@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+
+//classe Ecommerce
+
+class Ecommerce {
+
+    constructor(productList = []) {
+        this.productList = productList;
+        this.shoppingCart = [];
+    }
+
+    // Método para adicionar um produto à lista
+        addProduct(product) {
+            this.productList.push(product);
+            console.log(`Produto adicionado: ${product.name}`);
+        }
+    
+
+    // Método para definir o preço de um produto
+    setProductPrice(productId, price) {
+        const priceDefined = this.productList.find(product => product.id === productId);
+
+        if (priceDefined) {
+        priceDefined.price = price;
+        console.log(`Preço do produto atualizado: ${priceDefined.name} - Novo preço: ${price}`);
+        } else {
+        console.error(`Produto com ID ${productId} não encontrado.`);
+        }
+        }
+
+    // Método para obter a lista de todos os produtos
+    getAllProducts() {
+        return this.productList;
+        }
+
+    // Método para obter um string com todos os nomes dos produtos, separados por ponto e vírgula
+    getAllProductsNames() {
+        const productNames = this.productList.map(product => product.name);
+        return productNames.join(';');
+    }
+
+    // Método para obter um produto pelo ID
+    getProductById(productId) {
+        return this.productList.find(product => product.id === productId);
+    }
+
+    // Método para obter um produto pelo nome
+    getProductByName(productName) {
+        return this.productList.find(product => product.name === productName);
+    }
+
+
+    // Método para obter produtos pelo intervalo de preços
+    getProductsByPrice(initialPrice, finalPrice) {
+        return this.productList.filter(product => product.price >= initialPrice && product.price <= finalPrice);
+    }
+
+    // Método para adicionar um produto ao carrinho
+    addProductToCart(product) {
+        this.shoppingCart.push(product);
+        console.log(`Produto adicionado ao carrinho: ${product.name}`);
+    }
+
+    // Método para obter o conteúdo do carrinho
+    getCart() {
+        return this.shoppingCart;
+    }
+
+    // Método para devolver a soma de todos os produtos do carrinho
+    getCartTotalPrice() {
+    const totalPriceAcc = this.shoppingCart.reduce((total, product) => total + product.price, 0);
+    return totalPriceAcc.toFixed(2); // Arredonda para duas casas decimais
+}
+
+}
+
+   
+// Exemplo de uso da classe Ecommerce
+const ecommerceStore = new Ecommerce();
+
+// Adicionar o produto à lista
+const product1 = { id: 1, name: "Camisola", price: 39.99, category: "Roupas" };
+
+ecommerceStore.addProduct(product1);
+
+ecommerceStore.addProduct({ id: 2, name: "Calça", price: 49.99, category: "Roupas" });
+ecommerceStore.addProduct({ id: 3, name: "Livro", price: 19.99, category: "Livros" });
+ecommerceStore.addProduct({ id: 4, name: "Óculos", price: 29.99, category: "Acessórios" });
+   
+// Exemplo de atualização de preço
+ecommerceStore.setProductPrice(1, 39.99);
+
+// Obter a lista de todos os produtos
+const allProducts = ecommerceStore.getAllProducts();
+
+console.log("Lista de Todos os Produtos:", allProducts);
+
+// Obter a string com todos os nomes dos produtos
+const allProductNames = ecommerceStore.getAllProductsNames();
+
+// Exibir a string 
+console.log("Nomes de Todos os Produtos:", allProductNames);
+
+
+// Obter um produto pelo ID
+const productById = ecommerceStore.getProductById(2);
+
+// Exibir o produto 
+console.log("Produto pelo ID:", productById);
+
+// Obter um produto pelo nome diretamente ao chamar o método
+const productByName = ecommerceStore.getProductByName("Calça");
+
+// Exibir o produto 
+console.log("Produto pelo Nome:", productByName);
+
+// Obter produtos pelo intervalo de preços
+const productsByPrice = ecommerceStore.getProductsByPrice(20, 40);
+
+// Exibir os produtos 
+console.log("Produtos pelo Intervalo de Preços:", productsByPrice);
+
+// Adicionar um produto ao carrinho de compras
+const productToAddToCart = ecommerceStore.getProductById(2);
+const productToAddToCart2 = ecommerceStore.getProductById(3);
+
+ecommerceStore.addProductToCart(productToAddToCart);
+ecommerceStore.addProductToCart(productToAddToCart2);
+
+
+// Obter o conteúdo do carrinho de compras
+const shoppingCartContents = ecommerceStore.getCart();
+
+// Exibir o conteúdo do carrinho de compras 
+console.log("Conteúdo do Carrinho de Compras:", shoppingCartContents);
+
+// Obter o total do carrinho de compras
+const cartTotalPrice = ecommerceStore.getCartTotalPrice();
+
+// Exibir o total do carrinho de compras 
+console.log("Total do Carrinho de Compras:", cartTotalPrice);
+
+</script>
+</html> 

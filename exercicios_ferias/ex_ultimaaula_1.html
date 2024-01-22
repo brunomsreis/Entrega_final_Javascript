@@ -1,0 +1,49 @@
+
+<script>
+// Função para obter animes de um determinado ano
+  async function getAnimesByYear(year) {
+    const promise = new Promise((resolve, reject) => {
+      const animesRequest = new XMLHttpRequest();
+
+ //Pedido GET para a API 
+      animesRequest.open("GET", "https://api.jikan.moe/v4/top/anime");
+      animesRequest.send();
+      animesRequest.responseType = "json";
+
+      animesRequest.onload = function () {
+        const status = animesRequest.status;
+
+        if (status === 200) {
+          const data = animesRequest.response.data;
+          const animes = [];
+
+          for (const anime of data) {
+            if (anime.year === year) animes.push(anime)
+          }
+          resolve(animes);
+        } else {
+          reject([]);
+        }
+      };
+
+      animesRequest.onerror = function () {
+        resolve([]);
+      }
+    });
+
+    return promise
+      .then((success) => success)
+      .catch(() => []); 
+  }
+
+// Chamar a função com o ano desejado
+  const year = 2014;
+
+  getAnimesByYear(year).then(result => {
+      if (result.length > 0) console.log(`Results for year ${year}: `, result);
+
+      else console.log("No results found for selected year.")
+    }
+  );
+
+</script>

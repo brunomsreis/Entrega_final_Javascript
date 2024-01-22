@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="ecommerce_homeage.css">
+</head>
+<body>
+<script>
+
+ //Criar uma função que faça load dos dados da API: 'https://fakestoreapi.com/products
+ 
+ const fetchDados = async (info) => {
+          const dados = await fetch("https://fakestoreapi.com/products");
+          const dadosJson = await dados.json();
+    
+          return dadosJson;
+        }
+
+
+//Criar dinamicamente uma grelha de produtos, utilizando o nome e imagem dos produtos carregados;
+
+const criarGrelhaDeProdutos = (produtos) => {
+  
+        const grelhaContainer = document.createElement('div');
+        grelhaContainer.id = 'grelha-container';
+        grelhaContainer.classList.add('Grelha')
+        document.body.appendChild(grelhaContainer);
+
+        if (grelhaContainer) {
+        produtos.forEach((produto) => {
+      
+        const produtoDiv = document.createElement('div');
+        produtoDiv.classList.add('produto');
+
+        // Criar elemento de imagem
+        const imagemProduto = document.createElement('img');
+        imagemProduto.src = produto.image; 
+
+        // Criar elemento de texto para o nome do produto
+        const nomeProduto = document.createElement('p');
+        nomeProduto.textContent = produto.title; 
+
+        // Criar elemento de botão
+        const botaoProduto = document.createElement('button');
+        botaoProduto.textContent = 'Add to Cart';
+        botaoProduto.addEventListener('click', () => {
+        
+        adicionarAoCarrinho(produto);
+      });
+
+        // Adicionar imagem e nome do produto à div do produto
+        produtoDiv.appendChild(imagemProduto);
+        produtoDiv.appendChild(nomeProduto);
+        produtoDiv.appendChild(botaoProduto);
+
+        // Adicionar a div do produto ao container da grelha
+        grelhaContainer.appendChild(produtoDiv);
+        });
+
+        }
+        };
+
+//Chamar a função
+
+        fetchDados().then((dadosJson) => {
+        if (dadosJson) {
+         console.log("Dados carregados:", dadosJson);
+        criarGrelhaDeProdutos(dadosJson);
+        } else {
+         console.log("Erro ao carregar dados.");
+       }
+        });
+
+// Este botão deverá ter uma função ao ser clicado que adiciona um produto ao carrinho.
+
+    const adicionarAoCarrinho = async (produto) => {
+          try {
+            const endpoint = 'https://fakestoreapi.com/carts/7'; 
+            const userId = produto.id; // Substitua pelo ID do usuário real
+            const date = new Date().toISOString().split('T')[0]; // Data atual no formato YYYY-MM-DD
+
+            const requestBody = {
+            userId: userId,
+            date: date,
+            products: [
+            {
+              productId: produto.id, // Substitua pelo ID do produto real
+              quantity: 1 // Pode ajustar conforme necessário
+              }
+              ]
+     };
+
+    const response = await fetch(endpoint, {
+          method: 'PUT',
+          headers: {
+          'Content-Type': 'application/json'
+           },
+          body: JSON.stringify(requestBody)
+          });
+
+          if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.statusText}`);
+           }
+
+          console.log(`Produto '${produto.title}' '${produto.id}'adicionado ao carrinho com sucesso!`);
+          } catch (error) {
+          console.error('Erro ao adicionar ao carrinho:', error.message);
+          }
+};        
+
+
+</script>    
+</body>
+</html>
