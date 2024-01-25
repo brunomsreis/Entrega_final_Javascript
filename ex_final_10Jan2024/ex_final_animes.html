@@ -14,6 +14,7 @@
 
 // Aguarde até que o conteúdo da página seja totalmente carregado
 document.addEventListener("DOMContentLoaded", function() {
+
   // Criação dos elementos
   var grelha = document.createElement("div");
   grelha.className = "grelha closed";
@@ -52,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function() {
   genres.className = "genres";
   genres.innerHTML = "Géneros: <span class='value'></span>";
 
-  // Adição dos elementos ao DOM
+  // Acrescentar elementos a DOM
   content.appendChild(imagem);
   content.appendChild(nome);
   content.appendChild(rating);
@@ -63,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
   detalhes.appendChild(grelhaDetalhes);
   detalhes.appendChild(content);
 
-  // Adiciona os elementos criados ao corpo da página
+  // Adicionar os elementos criados ao body
   document.body.appendChild(grelha);
   document.body.appendChild(detalhes);
 });
@@ -115,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     const footer = document.createElement("footer");
 const paragraph = document.createElement("p");
+
 
 // Obtém o ano atual
 const anoAtual = new Date().getFullYear();
